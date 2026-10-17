@@ -1,0 +1,22 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      # 冒烟测试：示例译文必须被拦下（退出码 1），修好的译文必须通过（退出码 0）
+      - run: |
+          set +e
+          subqa check examples/zh.srt examples/en_ai.srt --glossary examples/glossary.csv; test $? -eq 1
+          subqa check examples/zh.srt examples/en_fixed.srt --glossary examples/glossary.csv

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "subqa"
+version = "0.1.0"
+description = "中译英 AI 字幕质检：格式规范、跨条一致性（人称性别、人名）、译文版本对比"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Chen Peiyao", email = "peiyaoc48@gmail.com" }]
+keywords = ["subtitle", "srt", "translation", "quality", "localization", "llm"]
+dependencies = ["pysubs2>=1.6"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[project.scripts]
+subqa = "subqa.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
